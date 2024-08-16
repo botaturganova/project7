@@ -40,7 +40,9 @@ class ViewController: UITableViewController {
         ac.addTextField()
         let submitAction = UIAlertAction(title: "OK", style: .default) { [unowned self, ac] _ in
             let filterText = ac.textFields?[0].text ?? ""
-            self.filterPetitions(filterText)
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.filterPetitions(filterText)
+            }
         }
         ac.addAction(submitAction)
         present(ac, animated: true)
@@ -54,7 +56,9 @@ class ViewController: UITableViewController {
                 return petition.title.contains(filter) || petition.body.contains(filter)
             }
         }
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     @objc func warning() {
